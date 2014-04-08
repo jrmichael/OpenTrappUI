@@ -1,4 +1,4 @@
-angular.module('openTrApp').factory('worklogEntryParser', function(timeProvider){
+angular.module('openTrApp').factory('worklogEntryParser', function (timeProvider) {
 
     var projectPattern = /#([a-zA-Z0-9_-]+)/;
     var workloadPattern = /( |^)(\d+(d|h|m)( )?)+/;
@@ -6,7 +6,7 @@ angular.module('openTrApp').factory('worklogEntryParser', function(timeProvider)
     var daysAgoPattern = /@t-(\d*)/;
     var dayOfWeekPattern = /@(monday|tuesday|wednesday|thursday|friday|saturday|sunday)/;
 
-    var getWorkloadFromExpression = function(expression) {
+    var getWorkloadFromExpression = function (expression) {
         if (workloadPattern.test(expression)) {
             return workloadPattern.exec(expression)[0].trim()
         } else {
@@ -22,8 +22,8 @@ angular.module('openTrApp').factory('worklogEntryParser', function(timeProvider)
         return moment(dayPattern.exec(expression)[1]).isValid();
     }
 
-    var getDayFromExpression = function(expression) {
-        if(matchesDayRegex(expression) && dayRegexHasValidDate(expression)) {
+    var getDayFromExpression = function (expression) {
+        if (matchesDayRegex(expression) && dayRegexHasValidDate(expression)) {
             return dayPattern.exec(expression)[1]
         } else if (forYesterday(expression)) {
             return moment(timeProvider.getCurrentDate()).subtract('days', 1).format("YYYY/MM/DD")
@@ -56,7 +56,7 @@ angular.module('openTrApp').factory('worklogEntryParser', function(timeProvider)
         return dayOfWeekPattern.test(expression);
     }
 
-    var dayValid = function(expression) {
+    var dayValid = function (expression) {
         return hasValidDateExpression(expression) || forYesterday(expression) || isForDaysAgo(expression) ||
             isForDayOfWeek(expression) || !hasDayExpression(expression)
     }
@@ -66,10 +66,10 @@ angular.module('openTrApp').factory('worklogEntryParser', function(timeProvider)
     }
 
     return{
-        isValid: function(expression) {
+        isValid: function (expression) {
             return projectValid(expression) && dayValid(expression)
         },
-        parse: function(expression) {
+        parse: function (expression) {
             return {
                 workload: getWorkloadFromExpression(expression),
                 projectName: projectPattern.exec(expression)[1],
